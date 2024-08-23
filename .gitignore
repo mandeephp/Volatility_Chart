@@ -11,8 +11,6 @@ __pycache__/
 # Environment variables file
 .env
 
-# Media files
-/media/
 
 # macOS
 .DS_Store
