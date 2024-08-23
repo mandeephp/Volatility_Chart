@@ -1,0 +1,50 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pdb
+
+
+# Environment variables file
+.env
+
+# Media files
+/media/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.class
+*.jks
+*.pem
+
+
+
+.eggs/
+# pytest
+.cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
