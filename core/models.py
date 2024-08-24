@@ -14,10 +14,22 @@ class VolatilityChat(models.Model):
     symbol = models.CharField(max_length=100, blank=True, null=True, db_column='SYMBOL')
 
 
+
     class Meta:
         verbose_name_plural = 'VolatilityChat'
-        db_table = '20240822'
+        managed = False
+        abstract = True
 
 
     def __str__(self):
         return f"{self.date} {self.time}"
+
+    @classmethod
+    def for_table(cls, table_name):
+        return type(f'VolatilityChat_{table_name}', (cls,), {
+            '__module__': cls.__module__,
+            'Meta': type('Meta', (), {
+                'db_table': table_name,
+                'managed': False
+            })
+        })

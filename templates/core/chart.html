@@ -1,23 +1,74 @@
 {% extends 'base.html' %}
+
 {% block content %}
-   <style>
-    .chart-container {
-        height: 700px;
-        width: 100%;
-    }
+    <style>
+        .chart-container {
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            position: relative;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .card-body {
+                height: 700px;
+                overflow: scroll;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-body {
+                height: 600px; /* Further adjust height for extra small screens */
+                overflow: scroll;
+            }
+        }
     </style>
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-11 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="chart-container">
+                        <div class="chart-container" id="chart-container">
                             {{ chart_html|safe }}
                         </div>
+                        {% if message %}
+                            <div class="alert alert-info mt-3">
+                                {{ message }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
 
+{% block extrascript %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var chartContainer = document.getElementById('chart-container');
+
+            function updateChart() {
+                $.ajax({
+                    url: '/chart/', // Replace with your endpoint
+                    method: 'GET',
+                    success: function(response) {
+                        var data = response.data || [];
+                        var layout = response.layout || {};
+                        if (data.length > 0) {
+                            Plotly.react(chartContainer, data, layout);
+                        }
+                    },
+                    error: function() {
+                        console.error('Failed to fetch chart data.');
+                    }
+                });
+            }
+            setInterval(updateChart, 5000);
+
+            // Initial chart update
+            updateChart();
+        });
+    </script>
 {% endblock %}
