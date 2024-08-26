@@ -112,7 +112,7 @@ def chart_view(request):
 
     fig.add_trace(go.Scatter(
         x=df['datetime'],
-        y=df['supertrend'],
+        y=df['indicator1_on_chart'],
         mode='lines',
         line=dict(color='orange', width=2),
         name='Supertrend'
@@ -154,7 +154,6 @@ def chart_view(request):
         fillcolor='rgba(255, 0, 0, 0.2)',
         name='Downtrend',
     ))
-
     df['indicator2_on_chart'] = df['indicator2_on_chart'].astype(float)
 
     df['arrow_color'] = df['indicator2_on_chart'].apply(
