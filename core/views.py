@@ -80,8 +80,12 @@ def chart_view(request):
     min_low = df['low'].min()
     center_line_value = (max_high + min_low) / 2
 
-    fig = make_subplots(rows=1, cols=1, shared_xaxes=True)
-
+    fig = make_subplots(
+        rows=2, cols=1,
+        shared_xaxes=True,
+        row_heights=[0.8, 0.2],  # Adjust height ratio between main chart and indicator
+        vertical_spacing=0.01
+    )
     fig.add_trace(go.Candlestick(
         x=df['datetime'],
         open=df['open'],
@@ -181,10 +185,9 @@ def chart_view(request):
         x=indicator2_df['datetime'],
         y=indicator2_df['indicator2_on_chart'],
         mode='lines',
-        line=dict(color='blue', width=3),  # Adjust width for better visibility
-        name='Indicator2',
-
-    ))
+        line=dict(color='blue', width=2),  # Adjust line style
+        name='Indicator2'
+    ), row=2, col=1)
 
     fig.update_layout(
         title='VOLATILITYCHART',
