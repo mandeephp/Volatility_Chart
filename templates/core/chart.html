@@ -8,6 +8,7 @@
             position: relative;
             width: 100%;
         }
+
         @media (max-width: 768px) {
             .card-body {
                 height: 700px;
@@ -45,30 +46,28 @@
 {% block extrascript %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var chartContainer = document.getElementById('chart-container');
+        function reloadDOM() {
+            $.ajax({
+                url: window.location.href,  // Current page URL
+                type: 'GET',
+                success: function (data) {
+                    document.open();  // Clear current DOM
+                    document.write(data);  // Write the new DOM content
+                    document.close();  // Close the document stream to render the new content
+                },
+                error: function (error) {
+                    console.error('Error refreshing content:', error);
+                }
+            });
+        }
 
-            function updateChart() {
-                $.ajax({
-                    url: '/chart/', // Replace with your endpoint
-                    method: 'GET',
-                    success: function(response) {
-                        var data = response.data || [];
-                        var layout = response.layout || {};
-                        if (data.length > 0) {
-                            Plotly.react(chartContainer, data, layout);
-                        }
-                    },
-                    error: function() {
-                        console.error('Failed to fetch chart data.');
-                    }
-                });
-            }
-            setInterval(updateChart, 5000);
-
-            // Initial chart update
-            updateChart();
-        });
+        // Initial delay of 5 seconds, then reload the DOM every 10 seconds
+        setTimeout(function () {
+            reloadDOM();  // Initial load after the delay
+            setInterval(reloadDOM, 10000);  // Continue to reload every 10 seconds
+        }, 5000);  // Delay of 5 seconds before the first reload
     </script>
+
 {% endblock %}

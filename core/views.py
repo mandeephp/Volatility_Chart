@@ -118,14 +118,6 @@ def chart_view(request):
         name='Supertrend'
     ))
 
-    fig.add_trace(go.Scatter(
-        x=df['datetime'],
-        y=df['upper_band'].where(df['trend_direction']),
-        mode='lines',
-        line=dict(color='green', width=1),
-        name='Upper Band',
-        visible='legendonly'
-    ))
 
     fig.add_trace(go.Scatter(
         x=[df['datetime'].min(), df['datetime'].max()],
@@ -135,25 +127,9 @@ def chart_view(request):
         name='Center Line'
     ))
 
-    fig.add_trace(go.Scatter(
-        x=df['datetime'],
-        y=df['supertrend'].where(df['trend_direction']),
-        mode='lines',
-        line=dict(width=0),
-        fill='tonexty',
-        fillcolor='rgba(0, 255, 0, 0.2)',
-        name='Uptrend',
-    ))
 
-    fig.add_trace(go.Scatter(
-        x=df['datetime'],
-        y=df['supertrend'].where(~df['trend_direction']),
-        mode='lines',
-        line=dict(width=0),
-        fill='tonexty',
-        fillcolor='rgba(255, 0, 0, 0.2)',
-        name='Downtrend',
-    ))
+
+
     df['indicator2_on_chart'] = df['indicator2_on_chart'].astype(float)
 
     df['arrow_color'] = df['indicator2_on_chart'].apply(
@@ -197,8 +173,6 @@ def chart_view(request):
     )
 
     chart_html = fig.to_html(full_html=False)
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Check for AJAX request
-        return JsonResponse({'chart_html': chart_html})  # Return only char
     return render(request, 'core/chart.html', {'chart_html': chart_html})
 
 def home(request):
