@@ -180,14 +180,14 @@ def chart_view(request):
             name='Signal Arrows'
         ))
     indicator2_df = df[df['indicator2_on_chart'] > 0]
-
-    fig.add_trace(go.Scatter(
-        x=indicator2_df['datetime'],
-        y=indicator2_df['indicator2_on_chart'],
-        mode='lines',
-        line=dict(color='blue', width=2),  # Adjust line style
-        name='Indicator2'
-    ), row=2, col=1)
+    if not indicator2_df.empty:
+        fig.add_trace(go.Scatter(
+            x=indicator2_df['datetime'],
+            y=indicator2_df['indicator1_in_pane_below'],
+            mode='lines',
+            line=dict(color='blue', width=2),  # Adjust line style
+            name='Indicator2'
+        ), row=2, col=1)
 
     fig.update_layout(
         title='VOLATILITYCHART',
