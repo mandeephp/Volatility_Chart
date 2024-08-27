@@ -3,10 +3,30 @@
 {% block content %}
     <style>
         .chart-container {
-            height: 0;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
             position: relative;
             width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: #f8f9fa; /* Light background for the chart container */
+        }
+
+        .chart-header {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1; /* Ensure the title is above the chart */
+            color: #333; /* Title color */
+            font-size: 1.5em; /* Adjust the font size for the title */
+            font-weight: bold; /* Bold title */
+        }
+
+        .refresh-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1; /* Ensure the button is above the chart */
         }
 
         @media (max-width: 768px) {
@@ -46,9 +66,10 @@
 {% block extrascript %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function reloadDOM() {
+        let refreshInterval;
+
+        function refreshChart() {
             $.ajax({
                 url: window.location.href,  // Current page URL
                 type: 'GET',
@@ -63,11 +84,11 @@
             });
         }
 
-        // Initial delay of 5 seconds, then reload the DOM every 10 seconds
-        setTimeout(function () {
-            reloadDOM();  // Initial load after the delay
-            setInterval(reloadDOM, 10000);  // Continue to reload every 10 seconds
-        }, 5000);  // Delay of 5 seconds before the first reload
-    </script>
+        // Ensure no multiple intervals are created
+        if (refreshInterval) {
+            clearInterval(refreshInterval);  // Clear the previous interval
+        }
 
+        refreshInterval = setInterval(refreshChart, 10000);  // Start a new interval
+    </script>
 {% endblock %}

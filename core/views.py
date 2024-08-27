@@ -127,7 +127,14 @@ def chart_view(request):
         name='Center Line'
     ))
 
-
+    fig.add_trace(go.Scatter(
+        x=df['datetime'],
+        y=df['upper_band'].where(df['trend_direction']),
+        mode='lines',
+        line=dict(color='green', width=1),
+        name='Upper Band',
+        visible='legendonly'
+    ))
 
 
     df['indicator2_on_chart'] = df['indicator2_on_chart'].astype(float)
